@@ -1,21 +1,41 @@
 console.log('hi1')
 
 // append option to #selDataset and loop through patient ID numbers to assign as values and text labels to options for drop down menu
+function buildDropdown() {
+    d3.json("data/samples.json").then((data) => {
+        var id = data.samples.map( x => x.id);
+        console.log(id);
+        console.log('hello');
+
+        var section = d3.select('#selDataset');
+        for (var i=0; i<id.length; i++) {
+        section.append("option").text(id[i]);
+        };
+    }
+    )};
+
+buildDropdown();
 
 // select patient ID handler
 function handleSelect() {
     d3.event.preventDefault();
 
     // select ID from dropdown menu
-    var patientID = d3.select('#selDataset').node().value;
+    var id = d3.select('#selDataset').node().value;
+    console.log(id);
 
+    // build plot based on selected stock
+
+    buildPlot(id);
 }
 
 // function to render plots
-d3.json("data/samples.json").then((data) => {
+function buildPlot(id) {
+    d3.json("data/samples.json").then((data) => {
     console.log(data);
-    console.log('hi2')
-
+    
+    var id = data.samples.map( x => x.id);
+    // define based on id
     var sample_values = data.samples.map(x => x.sample_values);
     var otu_ids = data.samples.map( x => x.otu_ids);
     console.log(sample_values);
@@ -37,4 +57,7 @@ d3.json("data/samples.json").then((data) => {
     };
 
     Plotly.newPlot("bar", data, layout);
-});
+    });
+}
+
+d3.select("#selDataset").on("click", handleSelect);
