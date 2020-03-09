@@ -42,7 +42,9 @@ function optionChanged(id) {
             console.log(data.samples[i])
             var otu_ids = data.samples[i]['otu_ids']
             console.log(otu_ids)
-            var sample_values = data.samples[i]['sample_values']
+            var sample_valuesList = data.samples[i]['sample_values'].sort( (a,b) => b.sample_valuesList - a.sample_valuesList)
+            console.log(sample_valuesList)
+            var sample_values = sample_valuesList.slice(0,10)
             console.log(sample_values)
         }
     }
@@ -57,7 +59,7 @@ function optionChanged(id) {
     //console.log(data.samples[0]);
 
     var trace1 = {
-        x: sample_values,
+        x: sample_values.reverse(),
         //y: otu_ids,
         type: "bar",
         name: data.samples.otu_labels
@@ -68,7 +70,7 @@ function optionChanged(id) {
     var layout = {
         title: "Number of Samples by OTU",
         xaxis: { title: "Sample size" },
-        yasxis: { title: "OTU" }
+        yaxis: { title: "OTU" }
     };
 
     Plotly.newPlot("bar", data, layout);
