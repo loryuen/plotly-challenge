@@ -36,12 +36,22 @@ function optionChanged(id) {
     //console.log(id);
     
     for (var i = 0; i<data.samples.length; i++) {
-        //console.log('testtest')
-        //console.log(data.samples[i]['id'])
+        // loop through to get otu and sample values for each subject selected
         if (data.samples[i]['id'] === id) {
             console.log(data.samples[i])
+
+            //get otu IDs
             var otu_ids = data.samples[i]['otu_ids']
             console.log(otu_ids)
+            var otu_idsTop = data.samples[i]['otu_ids'].sort( (a,b) => b.otu_idsTop - a.otu_idsTop)
+            var otu_ids10 = otu_idsTop.slice(0,10)
+
+            //labels list for OTUs
+            var labels =[]
+            otu_ids10.forEach(x=> labels.push(`OTU ${x}`.toString()))
+            console.log(labels)
+
+            // get sample values
             var sample_valuesList = data.samples[i]['sample_values'].sort( (a,b) => b.sample_valuesList - a.sample_valuesList)
             console.log(sample_valuesList)
             var sample_values = sample_valuesList.slice(0,10)
@@ -49,20 +59,14 @@ function optionChanged(id) {
         }
     }
     
-
-    // define based on id
-    //var sample_values = data.samples.map(x => x.sample_values);
-    //var otu_ids = data.samples.map( x => x.otu_ids);
-    //console.log(sample_values);
-    //console.log(otu_ids);
-
-    //console.log(data.samples[0]);
-
+    // make bar chart
     var trace1 = {
         x: sample_values.reverse(),
-        //y: otu_ids,
+        // y axis labels?
+        text: labels.reverse(),
+        //hovertext?
         type: "bar",
-        name: data.samples.otu_labels
+        //name: data.samples.otu_labels
     };
     
     var data = [trace1];
@@ -74,7 +78,27 @@ function optionChanged(id) {
     };
 
     Plotly.newPlot("bar", data, layout);
+
+    // metadata demographic info
+    //var demoBox = d3.select('#sample-metadata')
+        //demoBox.append('li')
+
+    for (var i = 0; i<data.metadata.length; i++) {
+        // loop through to get metadata to get the one for subject selected
+        if (data.metadata[i]['id'] === id) {
+            console.log(data.metadata[i])
+
+            //get otu IDs
+            var ethnicity = data.metadata[i]['ethnicity']
+            console.log(ethnicity)
+        }
+    }
+
+
     });
+
+
+
 }
 
 d3.select("#selDataset").on("click", handleSelect);
