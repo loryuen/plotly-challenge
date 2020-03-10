@@ -34,6 +34,7 @@ function optionChanged(id) {
     d3.json("data/samples.json").then((data) => {
     console.log(data);
     //console.log(id);
+
     
     for (var i = 0; i<data.samples.length; i++) {
         // loop through to get otu and sample values for each subject selected
@@ -58,7 +59,7 @@ function optionChanged(id) {
             console.log(sample_values)
         }
     }
-    
+
     // make bar chart
     var trace1 = {
         x: sample_values.reverse(),
@@ -79,26 +80,27 @@ function optionChanged(id) {
 
     Plotly.newPlot("bar", data, layout);
 
-    // metadata demographic info
-    //var demoBox = d3.select('#sample-metadata')
-        //demoBox.append('li')
-
-    for (var i = 0; i<data.metadata.length; i++) {
-        // loop through to get metadata to get the one for subject selected
-        if (data.metadata[i]['id'] === id) {
-            console.log(data.metadata[i])
-
-            //get otu IDs
-            var ethnicity = data.metadata[i]['ethnicity']
-            console.log(ethnicity)
-        }
-    }
-
-
     });
 
-
-
 }
+
+// metadata demographic info
+
+d3.json("data/samples.json").then((data) => {
+    console.log(data);
+    
+        //var demoBox = d3.select('#sample-metadata')
+        //demoBox.append('li')
+        for (var i = 0; i<153; i++) {
+            // loop through to get metadata to get the one for subject selected
+            if (data.metadata[i]['id'] === 940) {
+                console.log(data.metadata[i])
+                var ethnicity = data.metadata[i]['ethnicity']
+                console.log(ethnicity)
+                console.log('hellosicles')
+            }
+        }
+    }
+)
 
 d3.select("#selDataset").on("click", handleSelect);
