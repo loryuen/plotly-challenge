@@ -89,15 +89,28 @@ function optionChanged(id) {
 d3.json("data/samples.json").then((data) => {
     console.log(data);
     
-        //var demoBox = d3.select('#sample-metadata')
-        //demoBox.append('li')
         for (var i = 0; i<153; i++) {
             // loop through to get metadata to get the one for subject selected
             if (data.metadata[i]['id'] === 940) {
                 console.log(data.metadata[i])
+                var id = data.metadata[i]['id']
                 var ethnicity = data.metadata[i]['ethnicity']
-                console.log(ethnicity)
-                console.log('hellosicles')
+                var gender = data.metadata[i]['gender']
+                var age = data.metadata[i]['age']
+                var location = data.metadata[i]['location']
+                var bbtype = data.metadata[i]['bbtype']
+                var wfreq = data.metadata[i]['wfreq']
+
+                metadataList = [`id: ${id}`, `ethnicity: ${ethnicity}`, `gender: ${gender}`, `age: ${age}`, `location: ${location}`, `bbtype: ${bbtype}`, `wfreq: ${wfreq}`]
+
+                var demoBox = d3.select('#sample-metadata')
+                //var demoList = demoBox.append('')
+                metadataList.forEach( (x) => {
+                    var demoList = demoBox.append('li')
+                    demoDisp = demoList.text(x)
+                }
+                    )
+                
             }
         }
     }
