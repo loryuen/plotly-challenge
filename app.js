@@ -135,11 +135,14 @@ function optionChanged(id) {
 // bubble graph
 d3.json("data/samples.json").then((data) => {
     console.log(data);
+    console.log(data.samples[0]['id'])
+    
+    
     //console.log(id);
 
     for (var i = 0; i<data.samples.length; i++) {
         // loop through to get otu and sample values for each subject selected
-        if (data.samples[i]['id'] === 940) {
+        if (data.samples[i]['id'] === '940') {
             console.log(data.samples[i])
 
             //get otu IDs
@@ -167,9 +170,9 @@ d3.json("data/samples.json").then((data) => {
         y: sample_valuesList,
         //text: labels,
         //hovertext?
-       // mode: 'markers',
-        type: "bubble",
-        //marker: sample_valuesList
+        mode: 'markers',
+       // type: "bar",
+        marker: {size: sample_valuesList}
         //marker: sample_valuesList
         //name: data.samples.otu_labels
     };
