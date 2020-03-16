@@ -15,40 +15,72 @@ function buildDropdown() {
 
 buildDropdown();
 
+// function for metadata demographic info
+function demographicInfo() {
+    d3.json("data/samples.json").then((data) => {
+        console.log(data);
+        //console.log(data.metadata.length);
+        document.getElementById('sample-metadata').innerHTML='';
+
+            for (var i = 0; i<data.metadata.length; i++) {
+                // loop through to get metadata to get the one for subject selected
+                id = d3.select('#selDataset').node().value
+               // if (data.metadata[i]['id'] === id.toString()) {
+                if (data.samples[i]['id'] === id) {
+                    console.log(id)
+                    console.log(data.metadata[i])
+                    var idNo = data.metadata[i]['id']
+                    var ethnicity = data.metadata[i]['ethnicity']
+                    var gender = data.metadata[i]['gender']
+                    var age = data.metadata[i]['age']
+                    var location = data.metadata[i]['location']
+                    var bbtype = data.metadata[i]['bbtype']
+                    var wfreq = data.metadata[i]['wfreq']
+
+                    metadataList = [`id: ${idNo}`, `ethnicity: ${ethnicity}`, `gender: ${gender}`, `age: ${age}`, `location: ${location}`, `bbtype: ${bbtype}`, `wfreq: ${wfreq}`]
+
+                    var demoBox = d3.select('#sample-metadata')
+                    //var demoList = demoBox.append('')
+
+                    // var demoList = demoBox.append('par')
+                    // var hi = Object.entries(data.metadata[i]).forEach( ([key,value]) => {
+                    //     console.log(key,value)})
+                    // demoList.append(hi)
+
+                    metadataList.forEach( (x) => {
+                        var demoList = demoBox.append('li')
+                        demoDisp = demoList.text(x)
+                        Object.entries(data.metadata[i]).forEach( ([key,value]) => {
+                            console.log(key,value)
+                        })
+                    });
+                }
+                
+
+            }
+    })
+};
+//demographicInfo();
+
 // bubble graph
 function bubbleGraph() {
     d3.json("data/samples.json").then((data) => {
         console.log(data);
-        //console.log(data.samples[0]['id'])
-        
-        //console.log(d3.select('#selDataset').node().value)
-        //console.log(id);
 
         for (var i = 0; i<data.samples.length; i++) {
 
-            //console.log(data.samples[i]['id']) 
             id = d3.select('#selDataset').node().value
             console.log(id)
             // loop through to get otu and sample values for each subject selected
             if (data.samples[i]['id'] === id) {
-                //console.log(data.samples[i])
 
                 //get otu IDs
                 var otu_ids = data.samples[i]['otu_ids']
                 console.log(otu_ids)
-                //var otu_idsTop = data.samples[i]['otu_ids'].sort( (a,b) => b.otu_idsTop - a.otu_idsTop)
-                //var otu_ids10 = otu_idsTop.slice(0,10)
-
-                //labels list for OTUs
-                // var labels =[]
-                // otu_ids10.forEach(x=> labels.push(`OTU ${x}`.toString()))
-                // console.log(labels)
 
                 // get sample values
                 var sample_valuesList = data.samples[i]['sample_values']
                 console.log(sample_valuesList)
-                //var sample_values = sample_valuesList.slice(0,10)
-                //console.log(sample_values)
             }
         }
 
@@ -78,7 +110,6 @@ function bubbleGraph() {
 
         });
 };
-//bubbleGraph();
 
 // select patient ID handler
 function handleSelect() {
@@ -88,8 +119,7 @@ function handleSelect() {
     var id = d3.select('#selDataset').node().value;
     console.log(id);
 
-    // build plot based on selected stock
-
+    // build plots/table based on selected stock
     optionChanged(id);
 }
 
@@ -100,6 +130,7 @@ function optionChanged(id) {
     //console.log(id);
 
     //demographicInfo(id);
+    demographicInfo();
     bubbleGraph();
 
     for (var i = 0; i<data.samples.length; i++) {
@@ -149,55 +180,5 @@ function optionChanged(id) {
     });
 
 }
-
-// function for metadata demographic info
-//function demographicInfo() {
-    d3.json("data/samples.json").then((data) => {
-        console.log(data.metadata.length);
-        
-            for (var i = 0; i<data.metadata.length; i++) {
-                // loop through to get metadata to get the one for subject selected
-                if (data.metadata[i]['id'] === 940) {
-                    console.log(data.metadata[i])
-                    var idNo = data.metadata[i]['id']
-                    var ethnicity = data.metadata[i]['ethnicity']
-                    var gender = data.metadata[i]['gender']
-                    var age = data.metadata[i]['age']
-                    var location = data.metadata[i]['location']
-                    var bbtype = data.metadata[i]['bbtype']
-                    var wfreq = data.metadata[i]['wfreq']
-
-                    metadataList = [`id: ${idNo}`, `ethnicity: ${ethnicity}`, `gender: ${gender}`, `age: ${age}`, `location: ${location}`, `bbtype: ${bbtype}`, `wfreq: ${wfreq}`]
-
-                    var demoBox = d3.select('#sample-metadata')
-                    //var demoList = demoBox.append('')
-
-                    // var demoList = demoBox.append('par')
-                    // var hi = Object.entries(data.metadata[i]).forEach( ([key,value]) => {
-                    //     console.log(key,value)})
-                    // demoList.append(hi)
-
-                    metadataList.forEach( (x) => {
-                        var demoList = demoBox.append('li')
-                        demoDisp = demoList.text(x)
-                        Object.entries(data.metadata[i]).forEach( ([key,value]) => {
-                            console.log(key,value)
-                        })
-                    });
-                    
-
-                    }
-
-                    
-                    
-                }
-        }
-        
-    )
-//};
-//demographicInfo();
-
-
-
 
 d3.select("#selDataset").on("click", handleSelect);
