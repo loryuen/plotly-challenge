@@ -15,6 +15,71 @@ function buildDropdown() {
 
 buildDropdown();
 
+// bubble graph
+function bubbleGraph() {
+    d3.json("data/samples.json").then((data) => {
+        console.log(data);
+        //console.log(data.samples[0]['id'])
+        
+        //console.log(d3.select('#selDataset').node().value)
+        //console.log(id);
+
+        for (var i = 0; i<data.samples.length; i++) {
+
+            //console.log(data.samples[i]['id']) 
+            id = d3.select('#selDataset').node().value
+            console.log(id)
+            // loop through to get otu and sample values for each subject selected
+            if (data.samples[i]['id'] === id) {
+                //console.log(data.samples[i])
+
+                //get otu IDs
+                var otu_ids = data.samples[i]['otu_ids']
+                console.log(otu_ids)
+                //var otu_idsTop = data.samples[i]['otu_ids'].sort( (a,b) => b.otu_idsTop - a.otu_idsTop)
+                //var otu_ids10 = otu_idsTop.slice(0,10)
+
+                //labels list for OTUs
+                // var labels =[]
+                // otu_ids10.forEach(x=> labels.push(`OTU ${x}`.toString()))
+                // console.log(labels)
+
+                // get sample values
+                var sample_valuesList = data.samples[i]['sample_values']
+                console.log(sample_valuesList)
+                //var sample_values = sample_valuesList.slice(0,10)
+                //console.log(sample_values)
+            }
+        }
+
+        // make bubble chart
+        var trace2 = {
+            x: otu_ids,
+            y: sample_valuesList,
+            text: otu_ids,
+            //text: labels,
+            //hovertext?
+            mode: 'markers',
+        // type: "bar",
+            marker: {size: sample_valuesList, color: otu_ids} //fix colors
+            //marker: sample_valuesList
+            //name: data.samples.otu_labels
+        };
+        
+        var data = [trace2];
+
+        var layout = {
+            title: "Number of Samples by OTU",
+            xaxis: { title: "OTU ID" },
+            yaxis: { title: "Number of samples" }
+        };
+
+        Plotly.newPlot("bubble", data, layout);
+
+        });
+};
+//bubbleGraph();
+
 // select patient ID handler
 function handleSelect() {
     d3.event.preventDefault();
@@ -35,6 +100,7 @@ function optionChanged(id) {
     //console.log(id);
 
     //demographicInfo(id);
+    bubbleGraph();
 
     for (var i = 0; i<data.samples.length; i++) {
         // loop through to get otu and sample values for each subject selected
@@ -87,7 +153,7 @@ function optionChanged(id) {
 // function for metadata demographic info
 //function demographicInfo() {
     d3.json("data/samples.json").then((data) => {
-        console.log(data);
+        console.log(data.metadata.length);
         
             for (var i = 0; i<data.metadata.length; i++) {
                 // loop through to get metadata to get the one for subject selected
@@ -132,62 +198,6 @@ function optionChanged(id) {
 //demographicInfo();
 
 
-// bubble graph
-d3.json("data/samples.json").then((data) => {
-    console.log(data);
-    console.log(data.samples[0]['id'])
-    
-    
-    //console.log(id);
-
-    for (var i = 0; i<data.samples.length; i++) {
-        // loop through to get otu and sample values for each subject selected
-        if (data.samples[i]['id'] === '940') {
-            console.log(data.samples[i])
-
-            //get otu IDs
-            var otu_ids = data.samples[i]['otu_ids']
-            console.log(otu_ids)
-            //var otu_idsTop = data.samples[i]['otu_ids'].sort( (a,b) => b.otu_idsTop - a.otu_idsTop)
-            //var otu_ids10 = otu_idsTop.slice(0,10)
-
-            //labels list for OTUs
-            // var labels =[]
-            // otu_ids10.forEach(x=> labels.push(`OTU ${x}`.toString()))
-            // console.log(labels)
-
-            // get sample values
-            var sample_valuesList = data.samples[i]['sample_values']
-            console.log(sample_valuesList)
-            //var sample_values = sample_valuesList.slice(0,10)
-            //console.log(sample_values)
-        }
-    }
-
-    // make bar chart
-    var trace2 = {
-        x: otu_ids,
-        y: sample_valuesList,
-        //text: labels,
-        //hovertext?
-        mode: 'markers',
-       // type: "bar",
-        marker: {size: sample_valuesList}
-        //marker: sample_valuesList
-        //name: data.samples.otu_labels
-    };
-    
-    var data = [trace2];
-
-    var layout = {
-        title: "Number of Samples by OTU",
-        xaxis: { title: "OTU ID" },
-        yaxis: { title: "Number of samples" }
-    };
-
-    Plotly.newPlot("bubble", data, layout);
-
-    });
 
 
 d3.select("#selDataset").on("click", handleSelect);
