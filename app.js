@@ -4,6 +4,7 @@ function init() {
         barGraph();
         demographicInfo();
         bubbleGraph();
+        gauge();
         
     })};
 init();
@@ -24,6 +25,7 @@ function buildDropdown() {
 
 buildDropdown();
 
+// function for bar graph
 function barGraph() {
     d3.json("data/samples.json").then((data) => {
         console.log(data);
@@ -109,7 +111,7 @@ function demographicInfo() {
     })
 };
 
-// bubble graph
+// function for bubble graph
 function bubbleGraph() {
     d3.json("data/samples.json").then((data) => {
         console.log(data);
@@ -156,6 +158,36 @@ function bubbleGraph() {
         });
 };
 
+// gauge for belly button wash frequency
+function gauge() {
+    d3.json("data/samples.json").then((data) => {
+
+        for (var i = 0; i<data.metadata.length; i++) {
+            // loop through to get metadata to get the one for subject selected
+            id = d3.select('#selDataset').node().value;
+
+            if (data.samples[i]['id'] === id) {
+                var wfreq = data.metadata[i]['wfreq'];
+                console.log(wfreq);
+            };
+        };
+
+        var data = [
+            {
+                domain: {x:[0,1], y:[0,1]},
+                value: wfreq,
+                title: {text: "Bellybutton Wash Frequency"},
+                type: "indicator",
+                mode: "gauge+number"
+            }
+        ];
+
+        var layout = { width: 400, height: 300, margin: {t:0,b:0}};
+        Plotly.newPlot('gauge', data, layout);
+    });
+};
+
+
 // select patient ID handler
 function handleSelect() {
     d3.event.preventDefault();
@@ -176,6 +208,7 @@ function optionChanged(id) {
     barGraph();
     demographicInfo();
     bubbleGraph();
+    gauge();
 
     });
 };
