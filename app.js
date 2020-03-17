@@ -121,9 +121,10 @@ function bubbleGraph() {
             // loop through to get otu and sample values for each subject selected
             if (data.samples[i]['id'] === id) {
 
-                //get otu IDs
+                // get OTU IDs and make list of labels
+                var otu_labels = [];
                 var otu_ids = data.samples[i]['otu_ids'];
-                console.log(otu_ids);
+                otu_ids.forEach(x=>otu_labels.push(`OTU ${x}`.toString()));
 
                 // get sample values
                 var sample_valuesList = data.samples[i]['sample_values'];
@@ -135,7 +136,7 @@ function bubbleGraph() {
         var trace2 = {
             x: otu_ids,
             y: sample_valuesList,
-            text: otu_ids,
+            text: otu_labels, 
             mode: 'markers',
             marker: {size: sample_valuesList, color: otu_ids} 
         };
@@ -144,7 +145,7 @@ function bubbleGraph() {
 
         var layout = {
             autosize: true,
-            height: 800,
+            height: 700,
             title: "Number of Samples by OTU",
             xaxis: { title: "OTU ID" },
             yaxis: { title: "Number of samples" }
